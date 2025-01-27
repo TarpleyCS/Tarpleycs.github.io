@@ -1,1 +1,157 @@
-GDay Mate
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #4A90E2;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 1rem;
+      font-weight: 600;
+    }
+
+    header nav a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      background: linear-gradient(to bottom, #4A90E2, #6EC1E4);
+      color: white;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    .hero h2 {
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+    }
+
+    .projects {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem;
+    }
+
+    .projects h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #4A90E2;
+    }
+
+    .project-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin: 1rem 0;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-card h4 {
+      margin: 0;
+      color: #333;
+    }
+
+    .project-card p {
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .project-card a {
+      color: #4A90E2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .project-card a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    footer a {
+      color: #4A90E2;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>My Portfolio</h1>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#about">About Me</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h2>Welcome to My Portfolio</h2>
+    <p>Showcasing my coding skills and some of my favorite projects.</p>
+  </section>
+
+  <section id="projects" class="projects">
+    <h3>Featured Projects</h3>
+    <div class="project-card">
+      <h4>Project Title 1</h4>
+      <p>A brief description of the project, highlighting its key features and tech stack.</p>
+      <a href="#">View Project</a>
+    </div>
+    <div class="project-card">
+      <h4>Project Title 2</h4>
+      <p>A brief description of the project, highlighting its key features and tech stack.</p>
+      <a href="#">View Project</a>
+    </div>
+    <div class="project-card">
+      <h4>Project Title 3</h4>
+      <p>A brief description of the project, highlighting its key features and tech stack.</p>
+      <a href="#">View Project</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Created with ❤️ by [Your Name]. <a href="#">LinkedIn</a> | <a href="#">GitHub</a></p>
+  </footer>
+</body>
+</html>
