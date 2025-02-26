@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Routing Example</title>
+    <title>Modular Routing Example</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,103 +44,172 @@
         nav a.active {
             background-color: #4CAF50;
         }
-        #content {
+        #app {
             padding: 20px;
             min-height: 300px;
             background-color: #f9f9f9;
             border-radius: 5px;
             margin-top: 20px;
         }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            font-style: italic;
+            color: #666;
+        }
     </style>
 </head>
 <body>
     <nav>
         <ul>
-            <li><a href="#home" id="home-link">Home</a></li>
-            <li><a href="#about" id="about-link">About</a></li>
-            <li><a href="#services" id="services-link">Services</a></li>
-            <li><a href="#contact" id="contact-link">Contact</a></li>
+            <li><a href="/" data-link>Home</a></li>
+            <li><a href="/about" data-link>About</a></li>
+            <li><a href="/services" data-link>Services</a></li>
+            <li><a href="/contact" data-link>Contact</a></li>
         </ul>
     </nav>
     
     <div class="container">
-        <div id="content">
-            <!-- Content will be loaded here based on the route -->
+        <div id="app">
+            <div class="loading">Loading...</div>
         </div>
     </div>
 
-    <script>
-        // Define the routes and their respective content
-        const routes = {
-            'home': {
-                title: 'Home Page',
-                content: `
-                    <h1>Welcome to our Website</h1>
-                    <p>This is a simple demonstration of client-side routing without any frameworks or libraries.</p>
-                    <p>Click the navigation links above to see different pages without refreshing the browser.</p>
-                `
-            },
-            'about': {
-                title: 'About Us',
-                content: `
-                    <h1>About Us</h1>
-                    <p>We are a fictional company created for this routing example.</p>
-                    <p>Our mission is to demonstrate how simple routing can be implemented in vanilla JavaScript.</p>
-                `
-            },
-            'services': {
-                title: 'Our Services',
-                content: `
-                    <h1>Our Services</h1>
-                    <ul>
-                        <li>Web Development</li>
-                        <li>Mobile App Development</li>
-                        <li>UI/UX Design</li>
-                        <li>Consulting</li>
-                    </ul>
-                `
-            },
-            'contact': {
-                title: 'Contact Us',
-                content: `
-                    <h1>Contact Us</h1>
-                    <p>Email: example@domain.com</p>
-                    <p>Phone: (123) 456-7890</p>
-                    <p>Address: 123 Web Dev Street, Code City, JS 12345</p>
-                `
-            }
-        };
+    <!-- Templates - These would normally be separate HTML files -->
+    <template id="home-template">
+        <h1>Welcome to our Website</h1>
+        <p>This is a modular demonstration of client-side routing with templates.</p>
+        <p>Click the navigation links above to see different pages without refreshing the browser.</p>
+    </template>
 
-        // Function to handle routing
-        function router() {
-            // Get the hash from the URL (remove the # symbol)
-            let route = window.location.hash.slice(1);
-            
-            // If no route or unknown route, default to home
-            if (!route || !routes[route]) {
-                route = 'home';
-                window.location.hash = '#home';
+    <template id="about-template">
+        <h1>About Us</h1>
+        <p>We are a fictional company created for this routing example.</p>
+        <p>Our mission is to demonstrate how modular routing can be implemented in vanilla JavaScript.</p>
+    </template>
+
+    <template id="services-template">
+        <h1>Our Services</h1>
+        <ul>
+            <li>Web Development</li>
+            <li>Mobile App Development</li>
+            <li>UI/UX Design</li>
+            <li>Consulting</li>
+        </ul>
+    </template>
+
+    <template id="contact-template">
+        <h1>Contact Us</h1>
+        <p>Email: example@domain.com</p>
+        <p>Phone: (123) 456-7890</p>
+        <p>Address: 123 Web Dev Street, Code City, JS 12345</p>
+    </template>
+
+    <template id="404-template">
+        <h1>404 - Page Not Found</h1>
+        <p>Sorry, the page you are looking for does not exist.</p>
+        <p><a href="/" data-link>Return to Home</a></p>
+    </template>
+
+    <script>
+        // Define our router
+        class Router {
+            constructor(routes) {
+                this.routes = routes;
+                this.app = document.getElementById('app');
+                
+                // Handle navigation
+                document.addEventListener('click', e => {
+                    if (e.target.matches('[data-link]')) {
+                        e.preventDefault();
+                        this.navigateTo(e.target.href);
+                    }
+                });
+
+                // Handle popstate (browser back/forward)
+                window.addEventListener('popstate', this.handleRoute.bind(this));
+                
+                // Initial route handling
+                window.addEventListener('DOMContentLoaded', () => {
+                    this.handleRoute();
+                });
             }
-            
-            // Update the content
-            document.getElementById('content').innerHTML = routes[route].content;
-            document.title = routes[route].title + ' - Simple Routing Example';
-            
-            // Update active link
-            const links = document.querySelectorAll('nav a');
-            links.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === '#' + route) {
-                    link.classList.add('active');
-                }
-            });
+
+            // Update URL and handle route change
+            navigateTo(url) {
+                history.pushState(null, null, url);
+                this.handleRoute();
+            }
+
+            // Get the current route path
+            getPath() {
+                return location.pathname;
+            }
+
+            // Handle the current route
+            handleRoute() {
+                const path = this.getPath();
+                const route = this.routes[path] || this.routes['/404'];
+                
+                this.app.innerHTML = '<div class="loading">Loading...</div>';
+                
+                // For demonstration purposes, simulate fetch delay
+                setTimeout(() => {
+                    // In a real app, you'd fetch the template from a file:
+                    // fetch(`/templates/${route.template}.html`)
+                    //   .then(response => response.text())
+                    //   .then(html => { this.app.innerHTML = html; });
+                    
+                    // For this demo, we'll use the template elements
+                    const template = document.getElementById(`${route.template}-template`);
+                    if (template) {
+                        this.app.innerHTML = template.innerHTML;
+                        document.title = route.title;
+                        this.updateActiveNavLink(path);
+                    } else {
+                        this.app.innerHTML = '<p>Error: Template not found</p>';
+                    }
+                }, 300);
+            }
+
+            // Update the active navigation link
+            updateActiveNavLink(path) {
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === path);
+                });
+            }
         }
 
-        // Listen for hash changes to handle navigation
-        window.addEventListener('hashchange', router);
-        
-        // Initial route handling
-        window.addEventListener('load', router);
+        // Define our routes
+        const routes = {
+            '/': { title: 'Home', template: 'home' },
+            '/about': { title: 'About Us', template: 'about' },
+            '/services': { title: 'Our Services', template: 'services' },
+            '/contact': { title: 'Contact Us', template: 'contact' },
+            '/404': { title: 'Page Not Found', template: '404' }
+        };
+
+        // Initialize the router
+        const router = new Router(routes);
+
+        // For local testing without a server, use hash-based routing
+        // Uncomment the following lines and modify the Router class accordingly
+        /*
+        if (location.protocol === 'file:') {
+            // Override navigation methods to use hash-based routing for local testing
+            Router.prototype.navigateTo = function(url) {
+                window.location.hash = '#' + url;
+            };
+            
+            Router.prototype.getPath = function() {
+                return window.location.hash ? window.location.hash.slice(1) : '/';
+            };
+            
+            // Listen for hashchange instead of popstate
+            window.removeEventListener('popstate', router.handleRoute);
+            window.addEventListener('hashchange', () => router.handleRoute());
+        }
+        */
     </script>
 </body>
 </html>
